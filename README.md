@@ -2,7 +2,7 @@
 
 Lightweight agent/cron monitoring dashboard. Agents send heartbeat pings via HTTP POST. The dashboard shows what's alive, what's late, and what's dead. Email alerts via Resend when something dies.
 
-**Live dashboard**: `https://agent-ops.vercel.app` (replace with your URL after deploy)
+**Live dashboard**: https://agent-ops-coral.vercel.app
 
 ---
 
@@ -11,7 +11,7 @@ Lightweight agent/cron monitoring dashboard. Agents send heartbeat pings via HTT
 Send a ping from anything:
 
 ```bash
-curl -X POST https://agent-ops.vercel.app/api/ping \
+curl -X POST https://agent-ops-coral.vercel.app/api/ping \
   -H "Content-Type: application/json" \
   -d '{"name": "my-cron-job", "schedule": "every-24h", "project": "my-project"}'
 ```
@@ -26,7 +26,7 @@ That's it. The agent is now registered and monitored.
 
 ```javascript
 // Ping on startup and periodically for always-on agents
-const AGENT_OPS_URL = "https://agent-ops.vercel.app/api/ping";
+const AGENT_OPS_URL = "https://agent-ops-coral.vercel.app/api/ping";
 const os = require("os");
 
 async function ping(message) {
@@ -58,7 +58,7 @@ import requests
 def ping(message=""):
     try:
         import socket
-        requests.post("https://agent-ops.vercel.app/api/ping", json={
+        requests.post("https://agent-ops-coral.vercel.app/api/ping", json={
             "name": "my-python-script",
             "project": "my-project",
             "host": socket.gethostname(),
@@ -77,7 +77,7 @@ ping("Completed successfully")
 
 ```bash
 # Add to the end of your cron script
-curl -s -X POST https://agent-ops.vercel.app/api/ping \
+curl -s -X POST https://agent-ops-coral.vercel.app/api/ping \
   -H "Content-Type: application/json" \
   -d "{\"name\": \"nightly-backup\", \"schedule\": \"every-24h\", \"project\": \"infra\", \"host\": \"$(hostname)\"}"
 ```
