@@ -7,11 +7,16 @@ export const dynamic = "force-dynamic";
 
 export async function GET() {
   const agents = await readAgents();
+
+  // Snapshot statuses before reaping (reap mutates in place)
+  const prevStatuses = Object.fromEntries(
+    Object.entries(agents).map(([k, v]) => [k, v.status])
+  );
+
   const { agents: reaped, newlyDead } = reap(agents);
 
-  // Write back if any status changed, and fire alerts
   const statusChanged = Object.keys(reaped).some(
-    (k) => reaped[k].status !== agents[k]?.status
+    (k) => reaped[k].status !== prevStatuses[k]
   );
 
   if (statusChanged) {
@@ -19,7 +24,7 @@ export async function GET() {
   }
 
   if (newlyDead.length > 0) {
-    alertDead(newlyDead).catch(() => {});
+    await alertDead(newlyDead);
   }
 
   return NextResponse.json(reaped);

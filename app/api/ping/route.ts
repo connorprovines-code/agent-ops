@@ -53,12 +53,11 @@ export async function POST(request: Request) {
 
   const { agents: reaped, newlyDead } = reap(agents);
 
-  // Fire alerts without blocking the response
-  if (newlyDead.length > 0) {
-    alertDead(newlyDead).catch(() => {});
-  }
-
   await writeAgents(reaped);
+
+  if (newlyDead.length > 0) {
+    await alertDead(newlyDead);
+  }
 
   return NextResponse.json({ ok: true, key, agent: reaped[key] });
 }
