@@ -3,6 +3,8 @@ import { readAgents, writeAgents } from "@/lib/blob";
 import { reap } from "@/lib/reaper";
 import { alertDead } from "@/lib/alerts";
 
+export const dynamic = "force-dynamic";
+
 export async function GET() {
   const agents = await readAgents();
   const { agents: reaped, newlyDead } = reap(agents);

@@ -4,6 +4,7 @@ export type AgentStatus = "healthy" | "late" | "dead";
 export interface AgentEntry {
   name: string;
   project: string;
+  host?: string;
   schedule: Schedule;
   lastPing: string;
   status: AgentStatus;

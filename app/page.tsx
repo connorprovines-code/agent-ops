@@ -5,6 +5,7 @@ import { useEffect, useState } from "react";
 interface AgentEntry {
   name: string;
   project: string;
+  host?: string;
   schedule: string;
   lastPing: string;
   status: "healthy" | "late" | "dead";
@@ -182,6 +183,12 @@ function AgentCard({ agentKey, agent }: { agentKey: string; agent: AgentEntry })
       </div>
 
       <div className="text-xs text-gray-500 space-y-1">
+        {agent.host && (
+          <div className="flex justify-between">
+            <span>Host</span>
+            <span className="font-mono text-gray-400">{agent.host}</span>
+          </div>
+        )}
         <div className="flex justify-between">
           <span>Last ping</span>
           <span className="font-mono">{timeAgo(agent.lastPing)}</span>

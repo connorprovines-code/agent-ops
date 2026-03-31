@@ -27,6 +27,7 @@ That's it. The agent is now registered and monitored.
 ```javascript
 // Ping on startup and periodically for always-on agents
 const AGENT_OPS_URL = "https://agent-ops.vercel.app/api/ping";
+const os = require("os");
 
 async function ping(message) {
   await fetch(AGENT_OPS_URL, {
@@ -35,6 +36,7 @@ async function ping(message) {
     body: JSON.stringify({
       name: "my-agent",
       project: "my-project",
+      host: os.hostname(),
       schedule: "always-on",
       message,
     }),
@@ -55,9 +57,11 @@ import requests
 
 def ping(message=""):
     try:
+        import socket
         requests.post("https://agent-ops.vercel.app/api/ping", json={
             "name": "my-python-script",
             "project": "my-project",
+            "host": socket.gethostname(),
             "schedule": "every-6h",
             "message": message,
         }, timeout=5)
@@ -75,7 +79,7 @@ ping("Completed successfully")
 # Add to the end of your cron script
 curl -s -X POST https://agent-ops.vercel.app/api/ping \
   -H "Content-Type: application/json" \
-  -d '{"name": "nightly-backup", "schedule": "every-24h", "project": "infra"}'
+  -d "{\"name\": \"nightly-backup\", \"schedule\": \"every-24h\", \"project\": \"infra\", \"host\": \"$(hostname)\"}"
 ```
 
 ---
@@ -90,6 +94,7 @@ Register or update an agent heartbeat.
 |-------|------|----------|-------------|
 | `name` | string | **Yes** | Agent name (used as unique key, slugified) |
 | `project` | string | No | Group agents by project on the dashboard |
+| `host` | string | No | Machine/hostname running the agent (auto-detect with `os.hostname()` or `$(hostname)`) |
 | `schedule` | string | No | Expected ping frequency (default: `manual`) |
 | `message` | string | No | Status message shown on dashboard |
 | `meta` | object | No | Arbitrary metadata |

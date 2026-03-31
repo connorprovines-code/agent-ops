@@ -42,6 +42,7 @@ export async function POST(request: Request) {
   agents[key] = {
     name,
     project: (body.project as string) || existing?.project || "",
+    host: (body.host as string) || existing?.host || undefined,
     schedule,
     lastPing: now,
     status: "healthy",
